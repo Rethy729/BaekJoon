@@ -14,4 +14,4 @@ n = int(input())
 l = input()
 
 cut_off = indexing(l)[-1]
-print (n-cut_off)
+print (n - cut_off)
