@@ -1,0 +1,14 @@
+import sys
+
+def omg_graph(v, e, graph):
+    return 0
+
+input = sys.stdin.readline
+
+n = int(input())
+for _ in range(n):
+    v, e = list(map(int, input().split()))
+    graph = []
+    for _ in range(e):
+        graph.append(list(map(int, input().strip().split())))
+    print (graph)
