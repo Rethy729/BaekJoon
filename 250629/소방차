@@ -1,0 +1,17 @@
+import heapq
+import sys
+
+def firetruck(v, e, fire, truck, graph):
+    
+
+input = sys.stdin.readline
+n = int(input())
+
+for _ in range(n):
+    v, e, fire, truck = map(int, input().strip().split())
+    graph = [[] for _ in range(v + 1)]
+    for _ in range(e):
+        node_1, node_2, w = map(int, input().split())
+        graph[node_1].append((node_2, w))
+        graph[node_2].append((node_1, w))
+    print (firetruck(v, e, fire, truck, graph))

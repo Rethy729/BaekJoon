@@ -3,7 +3,7 @@ import sys
 def omg_graph(v, e, graph):
     visited = [False] * (v + 1)
     while not all (visited[1:]):
-        
+        return 0
 
 input = sys.stdin.readline
 
