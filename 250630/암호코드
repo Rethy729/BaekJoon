@@ -1,12 +1,15 @@
 def decipher(code):
     
     n = len(code)
+
+    if code[0] == '0':
+        return 0
     
     if n == 1:
         return 1
-
-    ten_digit = ['1', '2']
-    one_digit = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+    
+    number_dict = {'1':['1', '2', '3', '4', '5', '6', '7', '8', '9'], 
+                   '2': ['1', '2', '3', '4', '5', '6']}
 
     case_cnt = [0] * (n + 1)
     case_cnt[0] = 1
@@ -14,8 +17,11 @@ def decipher(code):
 
     for i in range(1, n):
         if code[i] == '0':
-            case_cnt[i + 1] = case_cnt[i - 1]
-        elif code[i] in one_digit and code[i-1] in ten_digit:
+            if code[i-1] not in number_dict:
+                return 0
+            else:
+                case_cnt[i + 1] = case_cnt[i - 1]
+        elif code[i-1] in number_dict and code[i] in number_dict[code[i-1]]:
             case_cnt[i + 1] = (case_cnt[i] + case_cnt[i-1]) % 1000000
         else:
             case_cnt[i + 1] = case_cnt[i]
