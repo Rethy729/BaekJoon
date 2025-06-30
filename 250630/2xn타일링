@@ -1,0 +1,17 @@
+def two_tile(n):
+    if n == 1:
+        return 1
+    if n == 2:
+        return 2
+    
+    case_cnt = [0] * (n+1)
+    case_cnt[1] = 1
+    case_cnt[2] = 2
+    for i in range(3, n+1):
+        case_cnt[i] = (case_cnt[i-1] + case_cnt[i-2]) % 10007
+    return case_cnt[-1]
+
+
+n = int(input())
+
+print (two_tile(n))
