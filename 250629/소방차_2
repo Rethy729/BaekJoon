@@ -1,0 +1,47 @@
+import heapq
+import sys
+
+def firetruck(fire_lst, truck_lst, graph):
+
+    INF = float('inf')
+
+    distance = [INF] * (v+1)
+    distance[0] = 0
+    dij_queue = []
+    heapq.heappush(dij_queue, (distance[0], 0))
+
+    while dij_queue:
+        dist, curr_node = heapq.heappop(dij_queue)
+
+        if distance[curr_node] < dist:
+            continue
+
+        for next_node, weight in graph[curr_node]:
+            new_dist = dist + weight
+            if new_dist < distance[next_node]:
+                distance[next_node] = new_dist
+                heapq.heappush(dij_queue, (new_dist, next_node))
+
+    dist_sum = 0
+    for fire_num in fire_lst:
+        dist_sum += distance[fire_num]
+
+    return dist_sum
+
+input = sys.stdin.readline
+n = int(input())
+
+for _ in range(n):
+    v, e, fire, truck = map(int, input().strip().split())
+    graph = [[] for _ in range(v + 1)]
+    for _ in range(e):
+        node_1, node_2, w = map(int, input().split())
+        graph[node_1].append((node_2, w))
+        graph[node_2].append((node_1, w))
+    fire_lst = list(map(int, input().split()))
+    truck_lst = list(map(int, input().split()))
+    for truck in truck_lst:
+        graph[0].append((truck, 0))
+        graph[truck].append((0, 0))
+
+    print (firetruck(fire_lst, truck_lst, graph))
