@@ -1,0 +1,28 @@
+import sys
+
+def coloring_game(m, array):
+    array.reverse()
+    
+    cnt = 0
+    for i in range(m-2):
+        if array[i+1] + array[i+2] <= array[i]:
+            continue
+
+        left = i+1
+        right = m-1
+        
+        while left < right:
+            if array[left] + array[right] > array[i] and (array[i] + array[left] + array[right]) > array[0]:
+                cnt += (right - left)
+                left += 1
+            else:
+                right -= 1
+    return cnt
+
+input = sys.stdin.readline
+n = int(input())
+for _ in range(n):
+    m = int(input())
+    array = list(map(int, input().strip().split()))
+    print (coloring_game(m, array))
+
