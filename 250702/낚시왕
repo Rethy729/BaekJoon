@@ -1,1 +1,85 @@
-print('hi')
+import sys
+
+def king_of_fishing(row, column, num, shark_info):
+
+    row_lst = list(range(row)) + list(range(row - 2, 0, -1))
+    row_lst_len = len(row_lst)
+    #print (row_lst)
+    column_lst = list(range(column)) + list(range(column - 2, 0, -1))
+    column_lst_len = len(column_lst)
+    #print (column_lst)
+    fishing_matrix = [[[0, 0, 0]] * column for _ in range(row)]
+    for data in shark_info:
+        fishing_matrix[data[0]-1][data[1]-1] = [data[2], data[3], data[4]]
+
+    score = 0
+    i = -1
+    while i < column:
+        i += 1 # 낚시꾼이 오른쪽으로 한 칸 이동한다
+        #print (fishing_matrix)
+        for j, row_data in enumerate(fishing_matrix): # 낚시왕이 있는 열에 있는 상어 중 제일 가까운 상어를 잡는다
+            if row_data[i] != [0, 0, 0]:
+                score += row_data[i][2]
+                fishing_matrix[j][i] = [0, 0, 0]             # 상어를 잡으면 격자판에서 잡은 상어가 사라진다
+                break
+        #print (fishing_matrix)
+        #print (score)
+
+        if i == column - 1:
+            break
+
+        new_fishing_matrix = [[[0, 0, 0]] * column for _ in range(row)]
+        #print (new_fishing_matrix)
+        for j in range(row):
+            for k in range(column):
+                if fishing_matrix[j][k] != [0, 0, 0]:
+                    info = fishing_matrix[j][k]
+
+                    if info[1] == 1:
+                        new_coordinate = [row_lst[(j - info[0]) % row_lst_len], k]
+                        new_j, new_k = new_coordinate
+                        if j - info[0] < 0:
+                            if (((info[0] - j) - 1) // (row-1)) % 2 == 0:
+                                info[1] = 2
+                        if new_fishing_matrix[new_j][new_k][2] < info[2]:
+                            new_fishing_matrix[new_j][new_k] = info
+                        
+                    elif info[1] == 2:
+                        new_coordinate = [row_lst[(j + info[0]) % row_lst_len], k]
+                        new_j, new_k = new_coordinate
+                        if j + info[0] > (row - 1):
+                            if (((info[0] + j) - 1) // (row-1)) % 2 == 1:
+                                info[1] = 1
+                        if new_fishing_matrix[new_j][new_k][2] < info[2]:
+                            new_fishing_matrix[new_j][new_k] = info
+
+                    elif info[1] == 3:
+                        new_coordinate = [j, column_lst[(k + info[0]) % column_lst_len]]
+                        new_j, new_k = new_coordinate
+                        if k + info[0] > (column - 1):
+                            if (((k + info[0]) - 1) // (column-1)) % 2 == 1:
+                                info[1] = 4
+                        if new_fishing_matrix[new_j][new_k][2] < info[2]:
+                            new_fishing_matrix[new_j][new_k] = info
+                                
+                    elif info[1] == 4:
+                        new_coordinate = [j, column_lst[(k - info[0]) % column_lst_len]]
+                        new_j, new_k = new_coordinate
+                        if k - info[0] < 0:
+                            if (((info[0] - k) - 1) // (column-1)) % 2 == 0:
+                                info[1] = 3
+                        if new_fishing_matrix[new_j][new_k][2] < info[2]:
+                            new_fishing_matrix[new_j][new_k] = info
+        
+        fishing_matrix = new_fishing_matrix
+        #print (fishing_matrix)
+    return score
+
+input = sys.stdin.readline
+total_row, total_column, shark_num = map(int, input().split())
+
+shark_info = []
+for _ in range(shark_num):
+    shark_info.append(list(map(int, input().strip().split())))
+
+print (king_of_fishing(total_row, total_column, shark_num, shark_info))
